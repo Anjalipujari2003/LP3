@@ -1,0 +1,47 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class FractionalKnapsack {
+    int value, weight;
+    double ratio;
+
+    public FractionalKnapsack(int value, int weight) {
+        this.value = value;
+        this.weight = weight;
+        this.ratio = (double) (value / weight);
+    }
+
+    public static double fknapsack(int capacity, ArrayList<FractionalKnapsack> items) {
+        items.sort((a, b) -> Double.compare(b.ratio, a.ratio));
+        double maxvalue = 0.0;
+        for (FractionalKnapsack item : items) {
+            if (capacity >= item.weight) {
+                capacity -= item.weight;
+                maxvalue += item.value;
+            } else {
+                maxvalue += item.value * ((double) capacity / item.weight);
+                break;
+            }
+        }
+        return maxvalue;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter no of items:");
+        int n = sc.nextInt();
+        System.out.println("Enter Capacity:");
+        int capacity = sc.nextInt();
+        ArrayList<FractionalKnapsack> items = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            System.out.println("Enter item " + (i + 1) + "value:");
+            int value = sc.nextInt();
+            System.out.println("Enter item " + (i + 1) + "weight:");
+            int weight = sc.nextInt();
+            items.add(new FractionalKnapsack(value, weight));
+        }
+        double maxvalue = fknapsack(capacity, items);
+        System.out.println("Maximum Profit:" + maxvalue);
+
+    }
+}
